@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\Departments\Schemas;
 
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
-
+use Filament\Forms\Components\Textarea;
 class DepartmentForm
 {
     public static function configure(Schema $schema): Schema
@@ -13,11 +14,10 @@ class DepartmentForm
             ->components([
                 TextInput::make('name')
                     ->required(),
-                TextInput::make('description')
+                Textarea::make('description')
                     ->default(null),
-                TextInput::make('manager_id')
-                    ->numeric()
-                    ->default(null),
+                Select::make('manager_id')->relationship('manager', 'name')->default(null)->searchable()->preload()->live(),
+
             ]);
     }
 }
