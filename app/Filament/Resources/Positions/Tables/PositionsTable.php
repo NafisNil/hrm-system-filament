@@ -7,6 +7,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Actions\DeleteAction;
 
 class PositionsTable
 {
@@ -16,14 +17,17 @@ class PositionsTable
             ->columns([
                 TextColumn::make('title')
                     ->searchable(),
-                TextColumn::make('department_id')
+                TextColumn::make('department.name')
+                    ->sortable(),
+                TextColumn::make('min_salary')->money('USD', true)
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('min_salary')
+                TextColumn::make('max_salary')->money('USD', true)
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('max_salary')
-                    ->numeric()
+                TextColumn::make('employees_count')
+                    ->counts('employees')
+                    ->label('Employee Count')->badge()
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -39,6 +43,7 @@ class PositionsTable
             ])
             ->recordActions([
                 EditAction::make(),
+                DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

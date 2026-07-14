@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\Departments\Tables;
+namespace App\Filament\Resources\LeaveTypes\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Filament\Tables\Columns\ColorColumn;
-use Filament\Actions\DeleteAction;
-class DepartmentsTable
+
+class LeaveTypesTable
 {
     public static function configure(Table $table): Table
     {
@@ -17,17 +17,11 @@ class DepartmentsTable
             ->columns([
                 TextColumn::make('name')
                     ->searchable(),
-                TextColumn::make('description')
-                    ->searchable(),
-                TextColumn::make('employees_count')
-                    ->counts('employees')
-                    ->label('Employee Count')->badge()
+                TextColumn::make('days_per_year')
+                    ->numeric()
                     ->sortable(),
-                ColorColumn::make('color_name')
-                    ->label('Color Name')
-                    ->sortable(),
-                TextColumn::make('manager.name')
-                    ->sortable(),
+                IconColumn::make('is_paid')
+                    ->boolean(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -42,7 +36,6 @@ class DepartmentsTable
             ])
             ->recordActions([
                 EditAction::make(),
-                DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
