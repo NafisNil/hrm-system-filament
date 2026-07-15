@@ -10,6 +10,7 @@ use App\Models\LeaveRequest;
 use App\Models\Attendance;
 class StatsOverview extends StatsOverviewWidget
 {
+   // protected ?string $pollingInterval = '60s';
     protected function getStats(): array
     {
         return [
