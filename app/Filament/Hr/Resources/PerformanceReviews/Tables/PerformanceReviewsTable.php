@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Hr\Resources\Attendances\Tables;
+namespace App\Filament\Hr\Resources\PerformanceReviews\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -8,25 +8,35 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class AttendancesTable
+class PerformanceReviewsTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('user.name')
+                TextColumn::make('user_id')
+                    ->numeric()
                     ->sortable(),
-                TextColumn::make('date')
-                    ->date()
+                TextColumn::make('reviewer_id')
+                    ->numeric()
                     ->sortable(),
-                TextColumn::make('check_in_time')
-                    ->time()
+                TextColumn::make('review_period')
+                    ->searchable(),
+                TextColumn::make('quality_of_work')
+                    ->numeric()
                     ->sortable(),
-                TextColumn::make('check_out_time')
-                    ->time()
+                TextColumn::make('communication_skills')
+                    ->numeric()
                     ->sortable(),
-                TextColumn::make('status')
-                    ->badge(),
+                TextColumn::make('teamwork')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('problem_solving')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('overall_performance')
+                    ->numeric()
+                    ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
