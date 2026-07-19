@@ -19,30 +19,24 @@ class UsersTable
                 TextColumn::make('email')
                     ->label('Email address')
                     ->searchable(),
-                TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable(),
+                TextColumn::make('department.name')
+                    ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('department_id')
-                    ->numeric()
+
+                TextColumn::make('department.name')
+                    ->searchable()
                     ->sortable(),
-                TextColumn::make('position_id')
-                    ->numeric()
+                TextColumn::make('position.name')
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('employee_id')
                     ->searchable(),
                 TextColumn::make('phone')
                     ->searchable(),
-                TextColumn::make('date_of_birth')
-                    ->date()
-                    ->sortable(),
+
                 TextColumn::make('hire_date')
                     ->date()
                     ->sortable(),
@@ -53,10 +47,9 @@ class UsersTable
                 TextColumn::make('salary')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('emergency_contact_name')
-                    ->searchable(),
-                TextColumn::make('emergency_contact_phone')
-                    ->searchable(),
+                TextColumn::make('roles.name')
+                    ->searchable()
+                    ->sortable(),
             ])
             ->filters([
                 //

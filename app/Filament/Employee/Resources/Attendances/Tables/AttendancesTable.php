@@ -1,36 +1,34 @@
 <?php
 
-namespace App\Filament\Hr\Resources\PerformanceReviews\Tables;
+namespace App\Filament\Employee\Resources\Attendances\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
-class PerformanceReviewsTable
+class AttendancesTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('user.name')
+                TextColumn::make('user_id')
+                    ->numeric()
                     ->sortable(),
-                TextColumn::make('user.employee_id')
+                TextColumn::make('date')
+                    ->date()
                     ->sortable(),
-                TextColumn::make('reviewer.name')
+                TextColumn::make('check_in_time')
+                    ->time()
                     ->sortable(),
-                TextColumn::make('review_period')
-                    ->searchable(),
-
-                TextColumn::make('overall_performance')
-                    ->numeric()->suffix('/5')->colors([
-                        'success' => fn ($state): bool => $state >= 4,
-                        'warning' => fn ($state): bool => $state >= 2 && $state < 4,
-                        'danger' => fn ($state): bool => $state < 2,
-                    ])->badge()
+                TextColumn::make('check_out_time')
+                    ->time()
                     ->sortable(),
+                TextColumn::make('status')
+                    ->badge(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -42,13 +40,9 @@ class PerformanceReviewsTable
             ])
             ->filters([
                 //
-                SelectFilter::make('user_id')
-                    ->relationship('user', 'name')->searchable()
-                    ->label('Employee'),
-                SelectFilter::make('reviewer_id')->relationship('reviewer', 'name')->searchable()
-                    ->label('Reviewer'),
             ])
             ->recordActions([
+                ViewAction::make(),
                 EditAction::make(),
             ])
             ->toolbarActions([

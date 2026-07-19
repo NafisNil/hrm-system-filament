@@ -19,22 +19,23 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
-class HrPanelProvider extends PanelProvider
+
+class EmployeePanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->id('hr')
-            ->path('hr')->login()->brandLogo(asset('images/logo.svg'))->favicon(asset('images/logo.svg'))->passwordReset()
+            ->id('employee')
+            ->path('employee')->favicon(asset('images/logo.svg'))->login()->brandLogo(asset('images/logo.svg'))->passwordReset()
             ->colors([
-                'primary' => Color::Green,
+                'primary' => Color::Cyan,
             ])
-            ->discoverResources(in: app_path('Filament/Hr/Resources'), for: 'App\Filament\Hr\Resources')
-            ->discoverPages(in: app_path('Filament/Hr/Pages'), for: 'App\Filament\Hr\Pages')
+            ->discoverResources(in: app_path('Filament/Employee/Resources'), for: 'App\Filament\Employee\Resources')
+            ->discoverPages(in: app_path('Filament/Employee/Pages'), for: 'App\Filament\Employee\Pages')
             ->pages([
                 Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Hr/Widgets'), for: 'App\Filament\Hr\Widgets')
+            ->discoverWidgets(in: app_path('Filament/Employee/Widgets'), for: 'App\Filament\Employee\Widgets')
             ->widgets([
                 AccountWidget::class,
                 FilamentInfoWidget::class,
@@ -49,11 +50,11 @@ class HrPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
-            ])->plugins([
-                FilamentShieldPlugin::make(),
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])->plugins([
+                FilamentShieldPlugin::make(),
             ]);
     }
 }

@@ -1,35 +1,45 @@
 <?php
 
-namespace App\Filament\Hr\Resources\PerformanceReviews\Tables;
+namespace App\Filament\Employee\Resources\LeaveRequests\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
-class PerformanceReviewsTable
+class LeaveRequestsTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('user.name')
+                TextColumn::make('user_id')
+                    ->numeric()
                     ->sortable(),
-                TextColumn::make('user.employee_id')
+                TextColumn::make('leave_type_id')
+                    ->numeric()
                     ->sortable(),
-                TextColumn::make('reviewer.name')
+                TextColumn::make('start_date')
+                    ->date()
                     ->sortable(),
-                TextColumn::make('review_period')
-                    ->searchable(),
-
-                TextColumn::make('overall_performance')
-                    ->numeric()->suffix('/5')->colors([
-                        'success' => fn ($state): bool => $state >= 4,
-                        'warning' => fn ($state): bool => $state >= 2 && $state < 4,
-                        'danger' => fn ($state): bool => $state < 2,
-                    ])->badge()
+                TextColumn::make('end_date')
+                    ->date()
+                    ->sortable(),
+                TextColumn::make('status')
+                    ->badge(),
+                TextColumn::make('days_requested')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('approved_by')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('approved_at')
+                    ->dateTime()
+                    ->sortable(),
+                TextColumn::make('rejected_at')
+                    ->dateTime()
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -42,13 +52,9 @@ class PerformanceReviewsTable
             ])
             ->filters([
                 //
-                SelectFilter::make('user_id')
-                    ->relationship('user', 'name')->searchable()
-                    ->label('Employee'),
-                SelectFilter::make('reviewer_id')->relationship('reviewer', 'name')->searchable()
-                    ->label('Reviewer'),
             ])
             ->recordActions([
+                ViewAction::make(),
                 EditAction::make(),
             ])
             ->toolbarActions([

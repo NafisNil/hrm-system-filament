@@ -1,35 +1,47 @@
 <?php
 
-namespace App\Filament\Hr\Resources\PerformanceReviews\Tables;
+namespace App\Filament\Employee\Resources\Payrolls\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
-class PerformanceReviewsTable
+class PayrollsTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('user.name')
+                TextColumn::make('user_id')
+                    ->numeric()
                     ->sortable(),
-                TextColumn::make('user.employee_id')
+                TextColumn::make('basic_salary')
+                    ->numeric()
                     ->sortable(),
-                TextColumn::make('reviewer.name')
+                TextColumn::make('allowances')
+                    ->numeric()
                     ->sortable(),
-                TextColumn::make('review_period')
+                TextColumn::make('deductions')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('net_salary')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('bonus')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('month')
                     ->searchable(),
-
-                TextColumn::make('overall_performance')
-                    ->numeric()->suffix('/5')->colors([
-                        'success' => fn ($state): bool => $state >= 4,
-                        'warning' => fn ($state): bool => $state >= 2 && $state < 4,
-                        'danger' => fn ($state): bool => $state < 2,
-                    ])->badge()
+                TextColumn::make('year')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('status')
+                    ->badge(),
+                TextColumn::make('paid_at')
+                    ->date()
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -42,13 +54,9 @@ class PerformanceReviewsTable
             ])
             ->filters([
                 //
-                SelectFilter::make('user_id')
-                    ->relationship('user', 'name')->searchable()
-                    ->label('Employee'),
-                SelectFilter::make('reviewer_id')->relationship('reviewer', 'name')->searchable()
-                    ->label('Reviewer'),
             ])
             ->recordActions([
+                ViewAction::make(),
                 EditAction::make(),
             ])
             ->toolbarActions([
