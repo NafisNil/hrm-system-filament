@@ -15,11 +15,9 @@ class LeaveRequestsTable
     {
         return $table
             ->columns([
-                TextColumn::make('user_id')
-                    ->numeric()
+                TextColumn::make('user.name')
                     ->sortable(),
-                TextColumn::make('leave_type_id')
-                    ->numeric()
+                TextColumn::make('leaveType.name')
                     ->sortable(),
                 TextColumn::make('start_date')
                     ->date()
@@ -32,8 +30,7 @@ class LeaveRequestsTable
                 TextColumn::make('days_requested')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('approved_by')
-                    ->numeric()
+                TextColumn::make('approver.name')
                     ->sortable(),
                 TextColumn::make('approved_at')
                     ->dateTime()

@@ -8,22 +8,22 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
-
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
+use Carbon\Carbon;
 class LeaveRequestForm
 {
     public static function configure(Schema $schema): Schema
     {
         return $schema
             ->components([
-                TextInput::make('user_id')
-                    ->required()
-                    ->numeric(),
-                TextInput::make('leave_type_id')
-                    ->required()
-                    ->numeric(),
-                DatePicker::make('start_date')
+                Select::make('user_id')->relationship('user', 'name')
+                    ->default(auth()->id())->disabled()->dehydrated(),
+                Select::make('leave_type_id')->relationship('leaveType', 'name')
                     ->required(),
-                DatePicker::make('end_date')
+                DatePicker::make('start_date')->minDate(now()->toDateString())->live()->afterStateUpdated(fn($state, Get $get, Set $set)=>self::calculateDaysRequested($state, $get, $set))
+                    ->required(),
+                DatePicker::make('end_date')->live()->afterStateUpdated(fn($state, Get $get, Set $set)=>self::calculateDaysRequested($state, $get, $set))
                     ->required(),
                 Select::make('status')
                     ->options(['pending' => 'Pending', 'approved' => 'Approved', 'rejected' => 'Rejected'])
@@ -36,8 +36,7 @@ class LeaveRequestForm
                     ->required()
                     ->numeric()
                     ->default(0),
-                TextInput::make('approved_by')
-                    ->numeric()
+                Select::make('approved_by')->relationship('approver', 'name')
                     ->default(null),
                 DateTimePicker::make('approved_at'),
                 DateTimePicker::make('rejected_at'),
@@ -45,5 +44,20 @@ class LeaveRequestForm
                     ->default(null)
                     ->columnSpanFull(),
             ]);
+    }
+
+    protected static function calculateDaysRequested($state, Get $get, Set $set): void
+    {
+        $startDate = $get('start_date');
+        $endDate = $get('end_date');
+
+        if ($startDate && $endDate) {
+            $startDate = Carbon::parse($startDate);
+            $endDate = Carbon::parse($endDate);
+            $daysRequested = $startDate->diffInDays($endDate) + 1; // +1 to include the start date
+            $set('days_requested', $daysRequested);
+        } else {
+            $set('days_requested', 0);
+        }
     }
 }
