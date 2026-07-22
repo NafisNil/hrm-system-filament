@@ -13,7 +13,9 @@ class PerformanceReviewsTable
 {
     public static function configure(Table $table): Table
     {
-        return $table
+        return $table->modifyQueryUsing(function ($query) {
+            return $query->where('user_id', auth()->id());
+        })->defaultSort('date', 'desc')
             ->columns([
                 TextColumn::make('user_id')
                     ->numeric()

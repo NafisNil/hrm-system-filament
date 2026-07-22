@@ -10,6 +10,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
+use Filament\Forms\Components\Hidden;
 use Carbon\Carbon;
 class LeaveRequestForm
 {
@@ -23,26 +24,18 @@ class LeaveRequestForm
                     ->required(),
                 DatePicker::make('start_date')->minDate(now()->toDateString())->live()->afterStateUpdated(fn($state, Get $get, Set $set)=>self::calculateDaysRequested($state, $get, $set))
                     ->required(),
-                DatePicker::make('end_date')->live()->afterStateUpdated(fn($state, Get $get, Set $set)=>self::calculateDaysRequested($state, $get, $set))
+                DatePicker::make('end_date')->live()->afterStateUpdated(fn($state, Get $get, Set $set)=>self::calculateDaysRequested($state, $get, $set))->minDate(now()->toDateString())
                     ->required(),
-                Select::make('status')
-                    ->options(['pending' => 'Pending', 'approved' => 'Approved', 'rejected' => 'Rejected'])
-                    ->default('pending')
-                    ->required(),
+
                 Textarea::make('reason')
                     ->default(null)
                     ->columnSpanFull(),
                 TextInput::make('days_requested')
-                    ->required()
+                    ->required()->disabled()
                     ->numeric()
                     ->default(0),
-                Select::make('approved_by')->relationship('approver', 'name')
-                    ->default(null),
-                DateTimePicker::make('approved_at'),
-                DateTimePicker::make('rejected_at'),
-                Textarea::make('rejection_reason')
-                    ->default(null)
-                    ->columnSpanFull(),
+
+                Hidden::make('status')->default('pending'),
             ]);
     }
 

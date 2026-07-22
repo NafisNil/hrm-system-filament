@@ -5,6 +5,7 @@ namespace App\Filament\Hr\Resources\LeaveRequests\Tables;
 use Illuminate\Support\Facades\Auth;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -62,7 +63,8 @@ class LeaveRequestsTable
                     ]),
             ])
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()->visible(fn ($record) => $record->status === 'pending'),
+                DeleteAction::make()->visible(fn ($record) => $record->status === 'pending'),
                 Action::make('approve')->icon('heroicon-o-check-circle')->color('success')
                     ->action(function ($record, $data) {
                         $record->status = 'approved';

@@ -14,6 +14,10 @@ class LeaveRequestsTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function ($query) {
+                return $query->where('user_id', auth()->id());
+            })
+            ->defaultSort('start_date', 'desc')
             ->columns([
                 TextColumn::make('user.name')
                     ->sortable(),
@@ -56,7 +60,7 @@ class LeaveRequestsTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+            //        DeleteBulkAction::make(),
                 ]),
             ]);
     }
